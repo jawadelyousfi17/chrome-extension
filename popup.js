@@ -254,8 +254,6 @@ async function addProfileData() {
     await chrome.storage.local.clear();
     window.location.reload();
   });
-
-  await renderPreferences();
 }
 
 async function fetchUserInfo() {

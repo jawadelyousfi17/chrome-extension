@@ -140,6 +140,7 @@ async function checkpdate() {
 
 function redisign() {
   const div1 = document.querySelector("header")?.children[0]?.children[0];
+  if (!document.querySelector("header")) return;
   const div2 = document.querySelector("header")?.children[0]?.children[1];
   const div3 =
     document?.querySelector("header")?.children[0]?.children[2]?.children[0];
@@ -189,6 +190,7 @@ async function main() {
     const userName = getUserLogin();
 
     const pref = await loadPreferences();
+    console.log(pref);
     loadPrefFromApi().then((data) => {
       updatePreferences(data);
     });
