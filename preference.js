@@ -1,7 +1,7 @@
 const DEFAULT_PREFERENCES = {
   changeProfile: true,
   changeCover: true,
-  showQuranInFullScreen: true,
+  showQuranInFullScreen: false,
   showQuranWidget: true,
   showRanking: true,
   showPomodor: true,
