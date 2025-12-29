@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "Simple Message Extension",
+  "version": "1.0",
+  "description": "A simple Chrome extension that shows a message.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting",
+    "identity",
+    "cookies",
+    "storage"
+  ],
+  "host_permissions": ["https://*.intra.42.fr/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://*.intra.42.fr/*"],
+      "css": ["content.css"],
+      "js": [
+        "content.js",
+        "utils.js",
+        "auth.js",
+        "addRankBadge.js",
+        "fetchUserData.js",
+        "tailwind.js",
+        "main.js",
+        "getAllUsers.js",
+        "ranking.js",
+        "sticky-note.js",
+        "pomodoro.js",
+        "quran.js",
+        "quran-widget.js",
+        "preference.js",
+        "all-quran.js"
+      ],
+      "run_at": "document_start",
+      "type": "module"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["alert.mp3"],
+      "matches": ["https://*.intra.42.fr/*"]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ranking Extension</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="container">
+      <!-- Not Logged In View -->
+      <div id="not-logged-in">
+        <h2>Welcome!</h2>
+        <h3>Please login to access your ranking dashboard</h3>
+        <button id="loginBtn" class="action-button">Login</button>
+        <p id="message"></p>
+      </div>
+
+      <!-- Logged In View -->
+      <div id="logged-in">
+      </div>
+
+     
+    </div>
+    <script src="preference.js"></script>
+    <script type="module" src="login.js"></script>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

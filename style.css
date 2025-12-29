@@ -1,0 +1,416 @@
+/* I dont liike the styles here make them better use this theme */
+/* palette #4E5567 #1F212A #343946 */
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+body {
+  width: 350px;
+  min-height: 400px;
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: #1f212a;
+  color: #ffffff;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #1f212a;
+  min-height: 400px;
+}
+
+button {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* Primary Action Button */
+.action-button {
+  background-color: #4e5567;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:hover {
+  background-color: #5d657a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.action-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary/Logout Button */
+.logout-button {
+  background-color: transparent;
+  border: 1px solid #4e5567;
+  color: #a0a0a0;
+  margin-top: 8px;
+}
+
+.logout-button:hover {
+  background-color: rgba(78, 85, 103, 0.1);
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.button-group button {
+  margin-top: 0;
+  flex: 1;
+}
+
+#message {
+  margin-top: 15px;
+  color: #e0e0e0;
+  font-weight: bold;
+}
+
+/* Not Logged In View */
+#not-logged-in {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+#not-logged-in h2 {
+  color: #ffffff;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+#not-logged-in p {
+  color: #a0a0a0;
+  margin-bottom: 20px;
+}
+
+/* Profile Container */
+.profile-container {
+  padding: 20px;
+  background-color: #1f212a;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background-color: #343946;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid #4e5567;
+}
+
+.profile-avatar {
+  width: 70px;
+  height: 70px;
+  border: 3px solid #4e5567;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-info {
+  flex: 1;
+  text-align: left;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.profile-login {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #a0a0a0;
+  font-weight: 500;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: #343946;
+  border: 1px solid transparent;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #a0a0a0;
+  font-size: 14px;
+}
+
+.detail-value {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Profile Section */
+.profile-section {
+  margin-top: 20px;
+}
+
+.section-title {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding-left: 5px;
+}
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: #343946;
+  border: 1px solid #4e5567;
+}
+
+.setting-label {
+  font-weight: 600;
+  color: #a0a0a0;
+  font-size: 14px;
+}
+
+.setting-value {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Logout Button */
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.action-button {
+  flex: 1;
+  padding: 12px;
+  background-color: #4e5567;
+  color: #ffffff;
+  border: 1px solid #4e5567;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #5d657a;
+}
+
+.logout-button {
+  flex: 1;
+  padding: 12px;
+  background-color: #343946;
+  color: #ffffff;
+  border: 1px solid #4e5567;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #4e5567;
+}
+
+/* URL Display */
+#urlDisplay {
+  word-break: break-all;
+  font-size: 11px;
+  color: #888;
+  padding: 10px;
+  margin: 15px 0 0 0;
+  background-color: #181a21;
+  text-align: center;
+  border: 1px solid #343946;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profile-container {
+  /* animation: fadeIn 0.4s ease-out; */
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f212a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4e5567;
+}
+
+/* Preferences Section */
+.preferences-container {
+  margin-top: 20px;
+  border-top: 1px solid #4e5567;
+  padding: 20px;
+}
+
+.preferences-title {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.preference-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(78, 85, 103, 0.3);
+}
+
+.preference-row:last-child {
+  border-bottom: none;
+}
+
+.preference-label {
+  color: #ccc;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1f212a;
+  border: 1px solid #4e5567;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #4e5567;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #343946;
+  border-color: #4e5567;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+  background-color: #fff;
+}
+
+/* Hover effects */
+.switch:hover .slider {
+  border-color: #fff;
+}
+
+.preference-row:hover .preference-label {
+  color: #fff;
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.social-icon {
+  color: #a0a0a0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.social-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
