@@ -179,7 +179,7 @@ async function main() {
       return;
     }
 
-    console.log(access_token);
+    // console.log(access_token);
 
     redisign();
     setTimeout(() => redisign(), 100);

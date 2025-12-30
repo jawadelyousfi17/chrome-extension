@@ -10,7 +10,7 @@ async function start() {
       const timer = setTimeout(() => {
         ___try___();
         return;
-      }, 1);
+      }, 100);
       if (counter > 500) {
         clearTimeout(timer);
         return;
