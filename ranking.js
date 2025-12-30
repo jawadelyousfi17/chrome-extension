@@ -28,8 +28,8 @@ async function showRanking() {
   const fetchUsersForYear = async (year, campusId) => {
     // If your backend supports it, it can read ?year=YYYY. If not, it will simply ignore.
     const url = year
-      ? `https://improved-1337.vercel.app/api/getUsers?year=${year}&campusId=${campusId}`
-      : "https://improved-1337.vercel.app/api/getUsers";
+      ? `${API_BASE_URL}/api/getUsers?year=${year}&campusId=${campusId}`
+      : `${API_BASE_URL}/api/getUsers`;
     console.log(url);
     const response = await fetch(url, {
       headers: {

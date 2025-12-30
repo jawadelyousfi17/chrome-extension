@@ -39,7 +39,7 @@ async function loadPrefFromApi() {
     }
 
     const response = await fetch(
-      "https://improved-1337.vercel.app/api/preferences?login=jel-yous",
+      `${API_BASE_URL}/api/preferences?login=jel-yous`,
       {
         method: "GET",
         headers: {

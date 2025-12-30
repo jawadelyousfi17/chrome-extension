@@ -1,4 +1,5 @@
 var campusId = 55;
+const API_BASE_URL = "https://improved-1337.vercel.app";
 
 function appendRankingIcon() {
   let sidbar;
@@ -128,9 +129,7 @@ function pleaseUpdate() {
 // Usage: Call this function when page loads or via button click
 // enableDarkMode();
 async function checkpdate() {
-  const response = await fetch(
-    "https://improved-1337.vercel.app/api/check-update"
-  );
+  const response = await fetch(`${API_BASE_URL}/api/check-update`);
   if (!response.ok) return false;
   const data = await response.json();
 
@@ -179,6 +178,8 @@ async function main() {
       pleaseLogin();
       return;
     }
+
+    console.log(access_token);
 
     redisign();
     setTimeout(() => redisign(), 100);

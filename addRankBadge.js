@@ -13,6 +13,11 @@ function getUserLogin() {
 }
 
 async function addCustomData({ email, github, rank }) {
+  const { access_token, refresh_token } = await chrome.storage.local.get([
+    "access_token",
+    "refresh_token",
+  ]);
+
   const pref = await loadPreferences();
   const dataDiv =
     document.querySelector(".App")?.children[3]?.children[0]?.children[0]
@@ -40,9 +45,13 @@ async function addCustomData({ email, github, rank }) {
   try {
     const login = getUserLogin();
 
-    const response = await fetch(
-      `https://improved-1337.vercel.app/api/user?login=${login}`
-    );
+    const response = await fetch(`${API_BASE_URL}/api/user?login=${login}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) return;
     const data = await response.json();
@@ -177,7 +186,7 @@ function addEditPenToDiv(divElement) {
   editButton.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    window.open("https://improved-1337.vercel.app/preference", "_blank");
+    window.open(`${API_BASE_URL}/preference`, "_blank");
 
     // Add your edit profile logic here
   });
