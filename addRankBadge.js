@@ -1,6 +1,16 @@
 const campuses = {
   16: "Khouribga",
 };
+// function that escapes html tags.
+function escapeHtml(text) {
+  if (!text) return text;
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 function getUserLogin() {
   const userName =
@@ -100,7 +110,9 @@ async function addCustomData({ email, github, rank }) {
   };
 
   const socialPill = (label, username, href) => {
-    const safeUsername = (username || "").trim();
+    // PATCHED: Applied escapeHtml here
+    const safeUsername = escapeHtml((username || "").trim());
+    
     if (!safeUsername) return "";
 
     return `<a href="${href}" target="_blank" class="inline-flex items-center gap-1.5 border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-gray-300 hover:text-white hover:border-white/20 transition-colors rounded-none" title="${label}: ${safeUsername}">
@@ -110,26 +122,27 @@ async function addCustomData({ email, github, rank }) {
     </a>`;
   };
 
+  // PATCHED: Added encodeURIComponent to all URLs below
   const socialPills = [
     socialPill(
       "GitHub",
       normalizedSocial.github,
-      `https://github.com/${normalizedSocial.github}`
+      `https://github.com/${encodeURIComponent(normalizedSocial.github)}`
     ),
     socialPill(
       "LinkedIn",
       normalizedSocial.linkedin,
-      `https://www.linkedin.com/in/${normalizedSocial.linkedin}`
+      `https://www.linkedin.com/in/${encodeURIComponent(normalizedSocial.linkedin)}`
     ),
     socialPill(
       "Twitter",
       normalizedSocial.twitter,
-      `https://twitter.com/${normalizedSocial.twitter}`
+      `https://twitter.com/${encodeURIComponent(normalizedSocial.twitter)}`
     ),
     socialPill(
       "Instagram",
       normalizedSocial.instagram,
-      `https://www.instagram.com/${normalizedSocial.instagram}`
+      `https://www.instagram.com/${encodeURIComponent(normalizedSocial.instagram)}`
     ),
   ].filter(Boolean);
 
@@ -145,7 +158,7 @@ async function addCustomData({ email, github, rank }) {
     : "";
 
   div.innerHTML = `
-   
+    
     
     <div class="flex flex-wrap items-center gap-x-10 gap-y-3">
       <div class="flex items-center gap-3">
@@ -153,7 +166,7 @@ async function addCustomData({ email, github, rank }) {
         <span class="px-2.5 py-0.5 text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(52,211,153,0.1)] rounded-none">${info.rank}</span>
       </div>
 
-    
+      
 
       ${socialLinksHtml}
     </div>
