@@ -51,7 +51,7 @@ async function refreshToken() {
 
 async function isLoggedIn() {
   // let access_token = getCookie("access_token");
-  const access_token = (await chrome.storage.local.get(["access_token"]))
+  let access_token = (await chrome.storage.local.get(["access_token"]))
     .access_token;
 
   if (!access_token) {

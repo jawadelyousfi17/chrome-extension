@@ -1,6 +1,15 @@
 var loggedIn = false;
 
 document.addEventListener("DOMContentLoaded", async function () {
+  // If the popup closes during OAuth (normal behavior), reopening it should still
+  // reflect the new auth state once the background worker stores tokens.
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== "local") return;
+    if (changes.access_token && changes.access_token.newValue) {
+      window.location.reload();
+    }
+  });
+
   await login();
   if (loggedIn) {
     await addProfileData();
@@ -60,18 +69,29 @@ async function login() {
       document.head.appendChild(style);
     }
 
-    // Send message to background script to handle OAuth
+    // The popup will usually close when the OAuth window opens.
+    // So we *don't* rely on this callback to update UI.
+    messageDisplay.textContent = "Complete login in the opened window…";
+
     chrome.runtime.sendMessage({ action: "startOAuth" }, (response) => {
+      // If the popup is still open, we can show a nicer error.
+      if (chrome.runtime.lastError) {
+        return;
+      }
+
+      if (!response) {
+        return;
+      }
+
       if (response.success) {
         messageDisplay.textContent = "Login Successful!";
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      } else {
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = originalText;
-        messageDisplay.textContent = response.error || "Login failed";
+        setTimeout(() => window.location.reload(), 300);
+        return;
       }
+
+      loginBtn.disabled = false;
+      loginBtn.innerHTML = originalText;
+      messageDisplay.textContent = response.error || "Login failed";
     });
   });
 }
@@ -103,9 +123,9 @@ async function login() {
 //     },
 //     async function (redirectUrl) {
 //       if (chrome.runtime.lastError) {
-//         sendResponse({ 
-//           success: false, 
-//           error: chrome.runtime.lastError.message 
+//         sendResponse({
+//           success: false,
+//           error: chrome.runtime.lastError.message
 //         });
 //         return;
 //       }
@@ -126,8 +146,8 @@ async function login() {
 //           try {
 //             const response = await fetch(TOKEN_ENDPOINT, {
 //               method: "POST",
-//               headers: { 
-//                 "Content-Type": "application/x-www-form-urlencoded" 
+//               headers: {
+//                 "Content-Type": "application/x-www-form-urlencoded"
 //               },
 //               body: params.toString(),
 //             });
@@ -154,21 +174,21 @@ async function login() {
 
 //               sendResponse({ success: true });
 //             } else {
-//               sendResponse({ 
-//                 success: false, 
-//                 error: "Token exchange failed" 
+//               sendResponse({
+//                 success: false,
+//                 error: "Token exchange failed"
 //               });
 //             }
 //           } catch (err) {
-//             sendResponse({ 
-//               success: false, 
-//               error: "Network error" 
+//             sendResponse({
+//               success: false,
+//               error: "Network error"
 //             });
 //           }
 //         } else {
-//           sendResponse({ 
-//             success: false, 
-//             error: "No authorization code received" 
+//           sendResponse({
+//             success: false,
+//             error: "No authorization code received"
 //           });
 //         }
 //       }
@@ -179,7 +199,7 @@ async function login() {
 // ============================================
 // ALTERNATIVE SOLUTION 2: Listen for storage changes in popup
 // ============================================
-// If you want to keep some logic in popup, listen for when 
+// If you want to keep some logic in popup, listen for when
 // background.js saves the tokens
 
 // In popup.js alternative approach:
@@ -189,7 +209,6 @@ async function login() {
 //     window.location.reload();
 //   }
 // });
-
 
 async function addProfileData() {
   const profileDiv = document.getElementById("logged-in");
