@@ -12,38 +12,38 @@ const campuses = {
 
 const DOMSelectors = {
   getApp: () => document.querySelector(".App"),
-  
-  getProfileContainer: () => 
+
+  getProfileContainer: () =>
     document.querySelector(".App")?.children[3]?.children[0]?.children[0],
-  
+
   getUserName: () =>
     document.querySelector(".App")?.children[3]?.children[0].children[0]
       ?.children[0]?.children[0]?.children[2]?.children[1].children[1],
-  
+
   getDataDiv: () =>
     document.querySelector(".App")?.children[3]?.children[0]?.children[0]
       ?.children[0]?.children[2],
-  
+
   getImageDiv: () =>
     document.querySelector(".App")?.children[3]?.children[0]?.children[0]
       ?.children[0].children[0].children[2].children[0].children[0],
-  
+
   getCover: () =>
     document.querySelector(".App")?.children[3]?.children[0]?.children[0],
-  
+
   getHeader: () =>
     document.querySelector(".App")?.children[3]?.children[0]?.children[0],
-  
-  getProfilePage: () => 
+
+  getProfilePage: () =>
     document.querySelector(".App")?.children[3]?.children[0],
-  
+
   getProfilePicture: () => {
     const profilePage = DOMSelectors.getProfilePage();
-    return profilePage?.children[0]?.children[0]?.children[0]?.children[2]?.children[1];
+    return profilePage?.children[0]?.children[0]?.children[0]?.children[2]
+      ?.children[1];
   },
-  
-  getCustomProfileDiv: () => 
-    document.querySelector('[data-custom-profile]'),
+
+  getCustomProfileDiv: () => document.querySelector("[data-custom-profile]"),
 };
 
 // ============================================================================
@@ -57,9 +57,9 @@ const DOMSelectors = {
 function getUserLogin() {
   const userNameElement = DOMSelectors.getUserName();
   const userName = userNameElement?.innerText;
-  
+
   if (!userName) return "";
-  
+
   if (userName.includes(" ")) {
     return userName.split(" ")[1];
   }
@@ -71,7 +71,7 @@ function getUserLogin() {
  * @returns {boolean} True if URL contains /users/
  */
 function isViewingOtherProfile() {
-  return window.location.href.includes('/users/');
+  return window.location.href.includes("/users/");
 }
 
 /**
@@ -249,7 +249,11 @@ function updateProfileImages(userData, preferences) {
 
   if (preferences.changeCover && cover && userData.cover) {
     // Use !important to override any inline styles that might be applied later
-    cover.style.setProperty('background-image', `url("${userData.cover}")`, 'important');
+    cover.style.setProperty(
+      "background-image",
+      `url("${userData.cover}")`,
+      "important"
+    );
   }
 }
 
@@ -269,10 +273,17 @@ function setupCoverImageProtection(userData, preferences) {
 
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+      if (
+        mutation.type === "attributes" &&
+        mutation.attributeName === "style"
+      ) {
         const currentBg = cover.style.backgroundImage;
         if (currentBg !== targetCoverUrl) {
-          cover.style.setProperty('background-image', targetCoverUrl, 'important');
+          cover.style.setProperty(
+            "background-image",
+            targetCoverUrl,
+            "important"
+          );
         }
       }
     });
@@ -280,7 +291,7 @@ function setupCoverImageProtection(userData, preferences) {
 
   observer.observe(cover, {
     attributes: true,
-    attributeFilter: ['style']
+    attributeFilter: ["style"],
   });
 
   return observer;
@@ -423,6 +434,9 @@ function addRankBadgeInProfile(rank) {
  * @param {Object} params - Parameters (legacy, not used)
  */
 async function addCustomData({ email, github, rank } = {}) {
+  const header = document.querySelector("header");
+  if (header) header.style.display = "";
+
   let coverObserver = null;
 
   try {
@@ -448,7 +462,7 @@ async function addCustomData({ email, github, rank } = {}) {
     // Add edit button if viewing own profile
     const myInfo = await fetchUserInfo();
     const login = getUserLogin();
-    
+
     if (myInfo.login === login) {
       addEditPenToDiv(imageDiv);
     }
@@ -456,12 +470,21 @@ async function addCustomData({ email, github, rank } = {}) {
     // Determine data fetching strategy based on profile being viewed
     if (isViewingOtherProfile()) {
       // Viewing another user's profile - always fetch fresh data, no caching
-      const userData = await fetchUserData(login, access_token);
-      coverObserver = renderUserData(userData, pref);
-      
+      // imageDiv.style.display = "inline-block";
+
+      const { userA } = await chrome.storage.local.get("userA");
+      if (!userA) {
+        const userData = await fetchUserData(login, access_token);
+        await chrome.storage.local.remove("userA");
+        coverObserver = renderUserData(userData, pref);
+      } else {
+        await chrome.storage.local.remove("userA");
+
+        coverObserver = renderUserData(userA, pref);
+      }
     } else {
       // Viewing own profile - use cache-then-refresh strategy
-      
+
       // 1. Load cached data and render immediately for fast display
       const cachedUserData = await getUserDataWithCache(login, access_token);
       coverObserver = renderUserData(cachedUserData, pref);
@@ -471,7 +494,6 @@ async function addCustomData({ email, github, rank } = {}) {
         coverObserver = renderUserData(freshUserData, pref, coverObserver);
       });
     }
-
   } catch (error) {
     console.error("Error in addCustomData:", error);
   }

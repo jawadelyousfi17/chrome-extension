@@ -2,6 +2,12 @@
    RANK BADGE STYLES
    ======================================== */
 
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+body {
+  font-family: "Montserrat", Arial, sans-serif;
+}
+
 .rank-badge {
   display: inline-flex;
   align-items: center;
@@ -166,10 +172,10 @@
 /* ========================================
    TOOLTIP STYLES
    ======================================== */
-
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 .rank-tooltip {
   position: absolute;
-  background: rgba(0, 0, 0, 0.9);
+  font-family: "Pacifico", cursive, Arial, sans-serif;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 8px;

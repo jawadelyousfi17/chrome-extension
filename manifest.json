@@ -1,25 +1,31 @@
 {
   "manifest_version": 3,
-  "name": "Simple Message Extension",
+  "name": "Intra Enhaced [1337] (beta)",
   "version": "1.0",
-  "description": "A simple Chrome extension that shows a message.",
+  "description": "Enhance your Intra platform experience with profile customization (picture, cover, social links), campus ranking tracker, Quran verse display, Pomodoro timer, and more productivity features.",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "24": "icon.png",
+      "32": "icon.png"
+    }
   },
-  "key" : "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnpl4L5gPq94mFrVGNYXXgo5Zv2zAL52MU4sv/5ajEpgpqCwo4V8wEPduoDZtTY8tldFVmiMmoF2o2usD+Y+Oi8usjf9xc1UEBXkwLBC0WWggU7ndxKGjYaTn55ISadWiG1o9hmY4ZPFxgBjItb6jZ+vWIdZ/mY+FI5lXa98pV+FoGs1UELDqx1f3snNRNvz4na3/E7DiiMuaYrUszXg6vaIK8MZpYxEgNs6RFVKhmKS2RF194Sdxny50w/eC6XkJHK3qXCpt47Me8I+30+TPJr9l9arBEvD47hnAxSN5YeXVHXb1elJv1uC9L68mlziaJxrnN9+kwCLmGspEmgU2MwIDAQAB"
-,
-  "permissions": [
-    "activeTab",
-    "tabs",
-    "scripting",
-    "identity",
-    "cookies",
-    "storage"
-  ],
-  "host_permissions": ["https://*.intra.42.fr/*"],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnpl4L5gPq94mFrVGNYXXgo5Zv2zAL52MU4sv/5ajEpgpqCwo4V8wEPduoDZtTY8tldFVmiMmoF2o2usD+Y+Oi8usjf9xc1UEBXkwLBC0WWggU7ndxKGjYaTn55ISadWiG1o9hmY4ZPFxgBjItb6jZ+vWIdZ/mY+FI5lXa98pV+FoGs1UELDqx1f3snNRNvz4na3/E7DiiMuaYrUszXg6vaIK8MZpYxEgNs6RFVKhmKS2RF194Sdxny50w/eC6XkJHK3qXCpt47Me8I+30+TPJr9l9arBEvD47hnAxSN5YeXVHXb1elJv1uC9L68mlziaJxrnN9+kwCLmGspEmgU2MwIDAQAB",
+  "permissions": ["activeTab", "tabs", "scripting", "identity", "storage"],
+
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+
+  "background": {
+    "service_worker": "worker.js"
+  },
   "content_scripts": [
     {
-      "matches": ["https://*.intra.42.fr/*"],
+      "matches": ["https://profile-v3.intra.42.fr/*"],
       "css": ["content.css"],
       "js": [
         "content.js",
@@ -44,7 +50,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["alert.mp3"],
+      "resources": ["alert.mp3", "loading.gif"],
       "matches": ["https://*.intra.42.fr/*"]
     }
   ]

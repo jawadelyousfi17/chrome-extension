@@ -12,6 +12,10 @@ function formatClasses(a) {
   return a.split();
 }
 
+// SOLUTION 1: Move OAuth logic to background.js (RECOMMENDED)
+// This is the best solution because background scripts don't close
+
+// In popup.js - Just send a message to background
 async function login() {
   const loginBtn = document.getElementById("loginBtn");
   const messageDisplay = document.getElementById("message");
@@ -27,9 +31,9 @@ async function login() {
     loginBtn.style.display = "none";
     messageDisplay.textContent = "You are logged in already";
     notLoggedInDiv.style.display = "none";
+    return;
   }
 
-  // Login button handler
   loginBtn.addEventListener("click", function () {
     // Show loading state
     const originalText = loginBtn.innerHTML;
@@ -44,7 +48,6 @@ async function login() {
       </span>
     `;
 
-    // Add keyframe animation for spinner
     if (!document.getElementById("spinner-style")) {
       const style = document.createElement("style");
       style.id = "spinner-style";
@@ -57,107 +60,136 @@ async function login() {
       document.head.appendChild(style);
     }
 
-    // 1. Get your Client ID and Secret from the 42 API (or your provider)
-    // 2. Set the Redirect URI in your provider settings to:
-    //    https://<your-extension-id>.chromiumapp.org/
-    //    (You can find your extension ID in chrome://extensions/)
-
-    const CLIENT_ID =
-      "u-s4t2ud-37d13c358b8f824d468bb29e001d26022e1ff8e6e2aeb8d7505ae3c014fdaf39";
-    const CLIENT_SECRET =
-      "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"; // ⚠️ WARNING: Storing secrets in extensions is not secure for public distribution
-    const REDIRECT_URI = chrome.identity.getRedirectURL();
-
-    // 42 API Endpoints (Example)
-    const AUTH_ENDPOINT = "https://api.intra.42.fr/oauth/authorize";
-    const TOKEN_ENDPOINT = "https://api.intra.42.fr/oauth/token";
-
-    const authUrl = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
-      REDIRECT_URI
-    )}&response_type=code`;
-
-    chrome.identity.launchWebAuthFlow(
-      {
-        url: authUrl,
-        interactive: true,
-      },
-      function (redirectUrl) {
-        if (chrome.runtime.lastError) {
-          // Reset button on error
-          loginBtn.disabled = false;
-          loginBtn.innerHTML = originalText;
-          messageDisplay.textContent =
-            "Error: " + chrome.runtime.lastError.message;
-          return;
-        }
-
-        if (redirectUrl) {
-          const url = new URL(redirectUrl);
-          const code = url.searchParams.get("code");
-
-          if (code) {
-            fetch(TOKEN_ENDPOINT, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                grant_type: "authorization_code",
-                client_id: CLIENT_ID,
-                client_secret: CLIENT_SECRET,
-                code: code,
-                redirect_uri: REDIRECT_URI,
-              }),
-            })
-              .then((res) => res.json())
-              .then(async (data) => {
-                console.log("Access Token:", data.access_token);
-
-                if (data.access_token) {
-                  await chrome.storage.local.set({
-                    access_token: data.access_token,
-                    refresh_token: data.refresh_token,
-                    createdAt: Date.now(),
-                    preferences: { theme: "light" },
-                  });
-
-                  loggedIn = true;
-
-                  messageDisplay.textContent = "Login Successful!";
-
-                  // Reload current tab
-                  chrome.tabs.query(
-                    { active: true, currentWindow: true },
-                    (tabs) => {
-                      if (tabs[0]) {
-                        chrome.tabs.reload(tabs[0].id);
-                      }
-                    }
-                  );
-
-                  // Reload popup
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 500);
-                } else {
-                  // Reset button on token exchange failure
-                  loginBtn.disabled = false;
-                  loginBtn.innerHTML = originalText;
-                  messageDisplay.textContent = "Token exchange failed.";
-                  console.error(data);
-                }
-              })
-              .catch((err) => {
-                // Reset button on network error
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = originalText;
-                messageDisplay.textContent = "Network error.";
-                console.error(err);
-              });
-          }
-        }
+    // Send message to background script to handle OAuth
+    chrome.runtime.sendMessage({ action: "startOAuth" }, (response) => {
+      if (response.success) {
+        messageDisplay.textContent = "Login Successful!";
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = originalText;
+        messageDisplay.textContent = response.error || "Login failed";
       }
-    );
+    });
   });
 }
+
+// ============================================
+// In background.js - Handle the OAuth flow
+// ============================================
+
+// const CLIENT_ID = "u-s4t2ud-37d13c358b8f824d468bb29e001d26022e1ff8e6e2aeb8d7505ae3c014fdaf39";
+// const CLIENT_SECRET = "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";
+// const AUTH_ENDPOINT = "https://api.intra.42.fr/oauth/authorize";
+// const TOKEN_ENDPOINT = "https://api.intra.42.fr/oauth/token";
+
+// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+//   if (request.action === "startOAuth") {
+//     handleOAuth(sendResponse);
+//     return true; // Keep the message channel open for async response
+//   }
+// });
+
+// async function handleOAuth(sendResponse) {
+//   const REDIRECT_URI = chrome.identity.getRedirectURL();
+//   const authUrl = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+
+//   chrome.identity.launchWebAuthFlow(
+//     {
+//       url: authUrl,
+//       interactive: true,
+//     },
+//     async function (redirectUrl) {
+//       if (chrome.runtime.lastError) {
+//         sendResponse({ 
+//           success: false, 
+//           error: chrome.runtime.lastError.message 
+//         });
+//         return;
+//       }
+
+//       if (redirectUrl) {
+//         const url = new URL(redirectUrl);
+//         const code = url.searchParams.get("code");
+
+//         if (code) {
+//           const params = new URLSearchParams({
+//             grant_type: "authorization_code",
+//             client_id: CLIENT_ID,
+//             client_secret: CLIENT_SECRET,
+//             code: code,
+//             redirect_uri: REDIRECT_URI,
+//           });
+
+//           try {
+//             const response = await fetch(TOKEN_ENDPOINT, {
+//               method: "POST",
+//               headers: { 
+//                 "Content-Type": "application/x-www-form-urlencoded" 
+//               },
+//               body: params.toString(),
+//             });
+
+//             const data = await response.json();
+
+//             if (data.access_token) {
+//               await chrome.storage.local.set({
+//                 access_token: data.access_token,
+//                 refresh_token: data.refresh_token,
+//                 createdAt: Date.now(),
+//                 preferences: { theme: "light" },
+//               });
+
+//               // Reload current tab
+//               chrome.tabs.query(
+//                 { active: true, currentWindow: true },
+//                 (tabs) => {
+//                   if (tabs[0]) {
+//                     chrome.tabs.reload(tabs[0].id);
+//                   }
+//                 }
+//               );
+
+//               sendResponse({ success: true });
+//             } else {
+//               sendResponse({ 
+//                 success: false, 
+//                 error: "Token exchange failed" 
+//               });
+//             }
+//           } catch (err) {
+//             sendResponse({ 
+//               success: false, 
+//               error: "Network error" 
+//             });
+//           }
+//         } else {
+//           sendResponse({ 
+//             success: false, 
+//             error: "No authorization code received" 
+//           });
+//         }
+//       }
+//     }
+//   );
+// }
+
+// ============================================
+// ALTERNATIVE SOLUTION 2: Listen for storage changes in popup
+// ============================================
+// If you want to keep some logic in popup, listen for when 
+// background.js saves the tokens
+
+// In popup.js alternative approach:
+// chrome.storage.onChanged.addListener((changes, namespace) => {
+//   if (namespace === 'local' && changes.access_token) {
+//     // Tokens were saved, user is now logged in
+//     window.location.reload();
+//   }
+// });
+
 
 async function addProfileData() {
   const profileDiv = document.getElementById("logged-in");

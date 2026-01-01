@@ -1,5 +1,6 @@
 var campusId = 55;
 const API_BASE_URL = "https://improved-1337.vercel.app";
+// const API_BASE_URL = "http://localhost:3000";
 
 function appendRankingIcon() {
   let sidbar;
@@ -168,6 +169,7 @@ function redisign() {
 // Run it immediately (and maybe again after a second in case 42 re-renders parts)
 
 async function main() {
+  await refreshToken();
   if (window.location.href.includes("profile-v3")) {
     // check if the user is logged IN
     const { access_token, refresh_token } = await chrome.storage.local.get([
@@ -179,7 +181,7 @@ async function main() {
       return;
     }
 
-    // console.log(access_token);
+    console.log(access_token);
 
     redisign();
     setTimeout(() => redisign(), 100);

@@ -4,11 +4,14 @@ async function refreshToken() {
   ).refresh_token;
 
   if (!refreshToken) {
-    throw new Error("No refresh token found");
+    // throw new Error("No refresh token found");
+    return;
   }
 
   const { createdAt } = await chrome.storage.local.get("createdAt");
   const diffInSeconds = (Date.now() - createdAt) / 1000;
+
+  console.log("CREATED AT ", createdAt);
 
   if (diffInSeconds < 100 * 60) return;
 

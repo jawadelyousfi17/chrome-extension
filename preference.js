@@ -31,7 +31,11 @@ function loadPreferences() {
 async function loadPrefFromApi() {
   try {
     await refreshToken();
+
     const { access_token } = await chrome.storage.local.get(["access_token"]);
+
+    const userD = await getUserDataWithCache();
+    const login = userD.login;
 
     if (!access_token) {
       console.warn("No access token found");
@@ -39,7 +43,7 @@ async function loadPrefFromApi() {
     }
 
     const response = await fetch(
-      `${API_BASE_URL}/api/preferences?login=jel-yous`,
+      `${API_BASE_URL}/api/preferences?login=${login}`,
       {
         method: "GET",
         headers: {
