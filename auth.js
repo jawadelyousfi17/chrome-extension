@@ -21,15 +21,17 @@ async function refreshToken() {
     "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";
   const TOKEN_ENDPOINT = "https://api.intra.42.fr/oauth/token";
 
+  const params = new URLSearchParams({
+    grant_type: "refresh_token",
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    refresh_token: refreshToken,
+  });
+
   const refreshResponse = await fetch(TOKEN_ENDPOINT, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      grant_type: "refresh_token",
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      refresh_token: refreshToken,
-    }),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
   });
 
   if (!refreshResponse.ok) {

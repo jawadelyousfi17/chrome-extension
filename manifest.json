@@ -14,6 +14,8 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnpl4L5gPq94mFrVGNYXXgo5Zv2zAL52MU4sv/5ajEpgpqCwo4V8wEPduoDZtTY8tldFVmiMmoF2o2usD+Y+Oi8usjf9xc1UEBXkwLBC0WWggU7ndxKGjYaTn55ISadWiG1o9hmY4ZPFxgBjItb6jZ+vWIdZ/mY+FI5lXa98pV+FoGs1UELDqx1f3snNRNvz4na3/E7DiiMuaYrUszXg6vaIK8MZpYxEgNs6RFVKhmKS2RF194Sdxny50w/eC6XkJHK3qXCpt47Me8I+30+TPJr9l9arBEvD47hnAxSN5YeXVHXb1elJv1uC9L68mlziaJxrnN9+kwCLmGspEmgU2MwIDAQAB",
   "permissions": ["activeTab", "tabs", "scripting", "identity", "storage"],
 
+  "host_permissions": ["https://api.intra.42.fr/*", "https://*.intra.42.fr/*"],
+
   "icons": {
     "16": "icon.png",
     "48": "icon.png",
