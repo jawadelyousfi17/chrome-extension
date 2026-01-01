@@ -37,8 +37,11 @@ async function loadPrefFromApi() {
     const userD = await getUserDataWithCache();
     const login = userD.login;
 
+    if (!userD || !login) {
+      return null;
+    }
+
     if (!access_token) {
-      console.warn("No access token found");
       return null;
     }
 
@@ -54,13 +57,12 @@ async function loadPrefFromApi() {
     );
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      return null;
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error loading preferences from API:", error);
     return null;
   }
 }

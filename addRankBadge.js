@@ -152,7 +152,7 @@ function updateUserDataInBackground(login, accessToken, onUpdate) {
       }
     })
     .catch((err) => {
-      console.error("Failed to fetch fresh user data:", err);
+      // console.error("Failed to fetch fresh user data:", err);
     });
 }
 
@@ -455,7 +455,7 @@ async function addCustomData({ email, github, rank } = {}) {
     const cover = DOMSelectors.getCover();
 
     if (!imageDiv || !cover || !dataDiv || !dataDiv.parentNode) {
-      console.warn("Required DOM elements not found");
+      // console.warn("Required DOM elements not found");
       return;
     }
 
@@ -495,6 +495,6 @@ async function addCustomData({ email, github, rank } = {}) {
       });
     }
   } catch (error) {
-    console.error("Error in addCustomData:", error);
+    // console.error("Error in addCustomData:", error);
   }
 }
