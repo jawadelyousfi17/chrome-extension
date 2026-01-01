@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Intra Enhaced [1337] (beta)",
   "version": "1.0",
-  "description": "Enhance your Intra platform experience with profile customization (picture, cover, social links), campus ranking tracker, Quran verse display, Pomodoro timer, and more productivity features.",
+  "description": "Enhance your Intra platform experience ",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

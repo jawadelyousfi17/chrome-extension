@@ -29,11 +29,30 @@ async function login() {
   const loginBtn = document.getElementById("loginBtn");
   const messageDisplay = document.getElementById("message");
   const notLoggedInDiv = document.getElementById("not-logged-in");
+  const privacyAccept = document.getElementById("privacyAccept");
 
   const { access_token, refresh_token } = await chrome.storage.local.get([
     "access_token",
     "refresh_token",
   ]);
+
+  const { privacyAccepted } = await chrome.storage.local.get([
+    "privacyAccepted",
+  ]);
+
+  if (privacyAccept && loginBtn) {
+    privacyAccept.checked = Boolean(privacyAccepted);
+    loginBtn.disabled = !privacyAccept.checked;
+
+    privacyAccept.addEventListener("change", async () => {
+      const accepted = privacyAccept.checked;
+      loginBtn.disabled = !accepted;
+      await chrome.storage.local.set({
+        privacyAccepted: accepted,
+        privacyAcceptedAt: accepted ? Date.now() : null,
+      });
+    });
+  }
 
   if (access_token && refresh_token) {
     loggedIn = true;
@@ -44,6 +63,12 @@ async function login() {
   }
 
   loginBtn.addEventListener("click", function () {
+    if (privacyAccept && !privacyAccept.checked) {
+      messageDisplay.textContent =
+        "Please accept the Privacy Policy before logging in.";
+      return;
+    }
+
     // Show loading state
     const originalText = loginBtn.innerHTML;
     loginBtn.disabled = true;

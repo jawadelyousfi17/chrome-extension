@@ -10,8 +10,23 @@
     <div class="container">
       <!-- Not Logged In View -->
       <div id="not-logged-in">
-        <h2>Welcome!</h2>
-        <h3>Please login to access your ranking dashboard</h3>
+        <h2>Login to use this extension features</h2>
+        <div class="privacy-consent">
+          <label class="privacy-label">
+            <input type="checkbox" id="privacyAccept" />
+            <span>
+              I agree to the
+              <a
+                id="privacyLink"
+                class="privacy-link"
+                href="https://improved-1337.vercel.app/privacy-policy"
+                target="_blank"
+                rel="noreferrer"
+                >Privacy Policy</a
+              >.
+            </span>
+          </label>
+        </div>
         <button id="loginBtn" class="action-button">Login</button>
         <p id="message"></p>
       </div>

@@ -2,6 +2,88 @@ var campusId = 55;
 const API_BASE_URL = "https://improved-1337.vercel.app";
 // const API_BASE_URL = "http://localhost:3000";
 
+// Host used for external pages (reporting, preferences, etc.)
+const HOST_URL = API_BASE_URL;
+
+async function appendReportBugsFloatingButton() {
+  if (document.getElementById("report-bugs-fab-container")) return;
+
+  const { reportBugsDismissed } = await chrome.storage.local.get([
+    "reportBugsDismissed",
+  ]);
+  if (reportBugsDismissed) return;
+
+  const container = document.createElement("div");
+  container.id = "report-bugs-fab-container";
+  container.style.cssText = [
+    "position: fixed",
+    "right: 18px",
+    "bottom: 18px",
+    "z-index: 2147483647",
+  ].join("; ");
+
+  const btn = document.createElement("button");
+  btn.id = "report-bugs-fab";
+  btn.type = "button";
+  btn.textContent = "Report bugs";
+  btn.style.cssText = [
+    "background: #343946",
+    "color: #ffffff",
+    "border: 1px solid #4E5567",
+    "border-radius: 12px",
+    "padding: 10px 12px",
+    "font: 600 12px/1.2 system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+    "letter-spacing: 0.3px",
+    "cursor: pointer",
+  ].join("; ");
+
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.setAttribute("aria-label", "Close");
+  closeBtn.textContent = "×";
+  closeBtn.style.cssText = [
+    "position: absolute",
+    "top: -10px",
+    "right: -10px",
+    "width: 22px",
+    "height: 22px",
+    "border-radius: 999px",
+    "border: 1px solid #4E5567",
+    "background: #1F212A",
+    "color: #ffffff",
+    "cursor: pointer",
+    "display: flex",
+    "align-items: center",
+    "justify-content: center",
+    "line-height: 1",
+    "font-size: 16px",
+    "padding: 0",
+  ].join("; ");
+
+  btn.addEventListener("mouseenter", () => {
+    btn.style.opacity = "0.95";
+  });
+  btn.addEventListener("mouseleave", () => {
+    btn.style.opacity = "1";
+  });
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.assign(`${HOST_URL}/report`);
+  });
+
+  closeBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await chrome.storage.local.set({ reportBugsDismissed: true });
+    container.remove();
+  });
+
+  container.appendChild(btn);
+  container.appendChild(closeBtn);
+  document.documentElement.appendChild(container);
+}
+
 function appendRankingIcon() {
   let sidbar;
   if (window.location.href.includes("profile-v3")) {
@@ -169,6 +251,7 @@ function redisign() {
 // Run it immediately (and maybe again after a second in case 42 re-renders parts)
 
 async function main() {
+  await appendReportBugsFloatingButton();
   await refreshToken();
   if (window.location.href.includes("profile-v3")) {
     // check if the user is logged IN
